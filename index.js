@@ -84,7 +84,18 @@ app.post('/identify', async (req, res) => {
   
   for (const contact of all_contact) {
     if (contact.linkPrecedence === 'primary') {
-        primary = contact
+        if (!primary){
+            primary = contact
+        }else {
+            if (contact.createdAt > primary.createdAt) {
+                await contact.update({ linkPrecedence: 'secondary', linkedId: primary.id });
+                secondaryContactIds.add(contact.id);
+            } else {
+                await primary.update({ linkPrecedence: 'secondary', linkedId: contact.id });
+                secondaryContactIds.add(primary.id);
+                primary = contact
+            }
+        }
     }else {
         secondaryContactIds.add(contact.id);
     }
