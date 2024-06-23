@@ -7,7 +7,15 @@ const { Op } = require('sequelize');
 const app = express();
 app.use(bodyParser.json());
 
-
+app.get('/contacts', async (req, res) => {
+    try {
+      const contacts = await Contact.findAll();
+      res.json(contacts);
+    } catch (error) {
+      console.error('Error fetching contacts:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
 
 
 sequelize.sync().then(() => {
