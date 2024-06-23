@@ -54,6 +54,29 @@ app.post('/identify', async (req, res) => {
     });
   }
 
+  const ids = new Set();
+
+  existingContacts.forEach(contact => {
+    if (contact.id) {
+        ids.add(contact.id);
+    }
+    if (contact.linkedId) {
+        ids.add(contact.linkedId);
+    }
+});
+   
+  const final_ids = Array.from(ids)
+  const all_contact = await Contact.findAll({
+    where: {
+    [Op.or]: [
+        { id: { [Op.in]: final_ids } },
+        { linkedId: { [Op.in]: final_ids } }
+    ]
+    },
+    order: [['linkPrecedence', 'ASC'], ['createdAt', 'ASC']]
+});
+
+
 });
 
 sequelize.sync().then(() => {
