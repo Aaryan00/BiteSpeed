@@ -77,6 +77,25 @@ app.post('/identify', async (req, res) => {
 });
 
 
+  const secondaryContactIds = new Set();
+  const emails = new Set();
+  const phoneNumbers = new Set();
+  let primary = null
+  
+  for (const contact of all_contact) {
+    if (contact.linkPrecedence === 'primary') {
+        primary = contact
+    }else {
+        secondaryContactIds.add(contact.id);
+    }
+    if (contact.email) {
+      emails.add(contact.email);
+    }
+    if (contact.phoneNumber) {
+      phoneNumbers.add(contact.phoneNumber);
+    }
+  }
+
 });
 
 sequelize.sync().then(() => {
