@@ -6,6 +6,7 @@ const { Op } = require('sequelize');
 
 const app = express();
 app.use(bodyParser.json());
+const port = process.env.PORT || 4000;
 
 
 app.get('/delete', async (req, res) => {
@@ -136,7 +137,7 @@ app.post('/identify', async (req, res) => {
 });
 
 sequelize.sync().then(() => {
-  app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+  app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`)
   });
 });
