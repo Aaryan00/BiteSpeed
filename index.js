@@ -97,6 +97,9 @@ app.post('/identify', async (req, res) => {
             }
         }
     }else {
+        if (contact.linkedId !== primary.id) {
+            await contact.update({linkedId: primary.id });
+        }
         secondaryContactIds.add(contact.id);
     }
     if (contact.email) {
