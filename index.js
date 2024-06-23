@@ -41,6 +41,19 @@ app.post('/identify', async (req, res) => {
     attributes: ['id', 'linkedId']
   });
 
+
+  if (existingContacts.length === 0) {
+    const newContact = await Contact.create({ email, phoneNumber, linkPrecedence: 'primary' });
+    return res.json({
+      contact: {
+        primaryContactId: newContact.id,
+        emails: email ? [email] : [],
+        phoneNumbers: phoneNumber ? [phoneNumber] : [],
+        secondaryContactIds: []
+      }
+    });
+  }
+
 });
 
 sequelize.sync().then(() => {
