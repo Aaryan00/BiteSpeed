@@ -27,6 +27,10 @@ app.get('/contacts', async (req, res) => {
     }
   });
 
+  
+app.post('/identify', async (req, res) => {
+  const { email, phoneNumber } = req.body;
+});
 
 sequelize.sync().then(() => {
   app.listen(3000, () => {
