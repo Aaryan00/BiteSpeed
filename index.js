@@ -7,6 +7,7 @@ const { Op } = require('sequelize');
 const app = express();
 app.use(bodyParser.json());
 
+
 app.get('/delete', async (req, res) => {
     try {
         await Contact.destroy({ where: {} });  // Deletes all records in the Contact table
@@ -26,10 +27,20 @@ app.get('/contacts', async (req, res) => {
       res.status(500).send('Internal Server Error');
     }
   });
-
   
 app.post('/identify', async (req, res) => {
   const { email, phoneNumber } = req.body;
+
+  const existingContacts = await Contact.findAll({
+    where: {
+      [Op.or]: [
+        { email },
+        { phoneNumber }
+      ]
+    },
+    attributes: ['id', 'linkedId']
+  });
+
 });
 
 sequelize.sync().then(() => {
