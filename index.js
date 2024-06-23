@@ -110,6 +110,7 @@ app.post('/identify', async (req, res) => {
     }
   }
 
+
   if (email && !emails.has(email)) {
     const newContact = await Contact.create({
       email, phoneNumber, linkedId: primary.id, linkPrecedence: 'secondary'
@@ -124,6 +125,14 @@ app.post('/identify', async (req, res) => {
     phoneNumbers.add(phoneNumber);
   }
 
+  res.json({
+    contact: {
+      primaryContactId: primary.id,
+      emails: Array.from(emails),
+      phoneNumbers: Array.from(phoneNumbers),
+      secondaryContactIds: Array.from(secondaryContactIds)
+    }
+  });
 });
 
 sequelize.sync().then(() => {
