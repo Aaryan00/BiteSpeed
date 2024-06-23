@@ -96,6 +96,20 @@ app.post('/identify', async (req, res) => {
     }
   }
 
+  if (email && !emails.has(email)) {
+    const newContact = await Contact.create({
+      email, phoneNumber, linkedId: primary.id, linkPrecedence: 'secondary'
+    });
+    secondaryContactIds.add(newContact.id);
+    emails.add(email);
+  } else if (phoneNumber && !phoneNumbers.has(phoneNumber)) {
+    const newContact = await Contact.create({
+      email, phoneNumber, linkedId: primary.id, linkPrecedence: 'secondary'
+    });
+    secondaryContactIds.add(newContact.id);
+    phoneNumbers.add(phoneNumber);
+  }
+
 });
 
 sequelize.sync().then(() => {
